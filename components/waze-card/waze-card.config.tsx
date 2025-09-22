@@ -1,0 +1,95 @@
+import {
+  MoveDownIcon,
+  MoveRightIcon,
+  MoveUpIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
+import { getTimePercentage } from "@/utils/time";
+
+const TREND_VISUALS_CONFIG = {
+  decrease: { label: "Melhorando", bgColor: "bg-green-500", icon: MoveUpIcon },
+  stable: { label: "Constante", bgColor: "bg-yellow-500", icon: MoveRightIcon },
+  increase: { label: "Piorando", bgColor: "bg-red-500", icon: MoveDownIcon },
+};
+
+export const getTrendVisuals = (trend: number) => {
+  switch (trend) {
+    case -1:
+      return TREND_VISUALS_CONFIG.decrease;
+    case 0:
+      return TREND_VISUALS_CONFIG.stable;
+    case 1:
+      return TREND_VISUALS_CONFIG.increase;
+    default:
+      return TREND_VISUALS_CONFIG.stable;
+  }
+};
+
+export function getSeverityDescription(level: number): string {
+  return (
+    {
+      0: "Sem trânsito",
+      1: "Trânsito livre",
+      2: "Trânsito leve",
+      3: "Trânsito moderado",
+      4: "Trânsito intenso",
+      5: "Parado / Congestionado",
+    }[level] ?? "Nível de trânsito desconhecido"
+  );
+}
+
+export function getPercentageVisuals(
+  currentTimeSeconds: number,
+  historicTimeSeconds: number,
+): {
+  status: string;
+  label: string;
+  bgColor: string;
+  badgeBg: string;
+  percentage: number;
+  icon: React.ElementType;
+} {
+  const percentage = getTimePercentage(currentTimeSeconds, historicTimeSeconds);
+
+  const icon = percentage >= 0 ? TrendingUpIcon : TrendingDownIcon;
+
+  switch (true) {
+    case percentage <= 30:
+      return {
+        status: "low",
+        label: "Abaixo da média",
+        bgColor: "bg-green-900",
+        badgeBg: "bg-green-500/20",
+        percentage,
+        icon,
+      };
+    case percentage <= 80:
+      return {
+        status: "normal",
+        label: "Dentro da média",
+        bgColor: "bg-yellow-900",
+        badgeBg: "bg-yellow-500/20",
+        percentage,
+        icon,
+      };
+    case percentage <= 100:
+      return {
+        status: "high",
+        label: "Acima da média",
+        bgColor: "bg-red-900",
+        badgeBg: "bg-red-500/20",
+        percentage,
+        icon,
+      };
+    default:
+      return {
+        status: "critical",
+        label: "Muito acima da média",
+        bgColor: "bg-purple-900",
+        badgeBg: "bg-purple-700/20",
+        percentage,
+        icon,
+      };
+  }
+}
