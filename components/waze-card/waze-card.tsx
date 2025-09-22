@@ -23,8 +23,8 @@ export type WazeCardProps = {
 
   length: number;
 
-  currentTimeSeconds: number;
-  historicTimeSeconds: number;
+  currentSpeed: number;
+  historicSpeed: number;
 
   isNewData?: boolean;
   isUpdating?: boolean;
@@ -37,8 +37,8 @@ export type WazeCardProps = {
 const WazeCard: FC<WazeCardProps> = ({
   title,
 
-  currentTimeSeconds,
-  historicTimeSeconds,
+  currentSpeed,
+  historicSpeed,
   isNewData = false,
   isUpdating = false,
   action,
@@ -46,10 +46,7 @@ const WazeCard: FC<WazeCardProps> = ({
   trend,
 }) => {
   const trendVisuals = getTrendVisuals(trend);
-  const PercentageVisuals = getPercentageVisuals(
-    currentTimeSeconds,
-    historicTimeSeconds,
-  );
+  const PercentageVisuals = getPercentageVisuals(currentSpeed, historicSpeed);
 
   const visibleMetrics = metrics.filter(
     (m) => m.value != null && m.value !== "",

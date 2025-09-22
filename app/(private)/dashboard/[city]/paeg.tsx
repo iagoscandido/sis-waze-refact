@@ -32,8 +32,8 @@ export default async function Citypage({
                 length={i.length}
                 severity={i.severity}
                 trend={i.trend}
-                currentTimeSeconds={i.seconds}
-                historicTimeSeconds={i.delaySeconds + i.seconds}
+                currentSpeed={i.seconds}
+                historicSpeed={i.delaySeconds + i.seconds}
                 metrics={[
                   {
                     id: "traffic-desc",

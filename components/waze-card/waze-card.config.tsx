@@ -5,7 +5,6 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import { getTimePercentage } from "@/utils/time";
 
 const TREND_VISUALS_CONFIG = {
   decrease: { label: "Melhorando", bgColor: "bg-green-500", icon: MoveUpIcon },
@@ -39,6 +38,30 @@ export function getSeverityDescription(level: number): string {
   );
 }
 
+function calculateDelayPercentage(
+  delaySeconds: number,
+  seconds: number,
+): number {
+  if (seconds <= 0) {
+    return 0;
+  }
+
+  const percentage = (delaySeconds / seconds) * 100;
+
+  return percentage;
+}
+
+function calcularPercentual(atual: number, historica: number) {
+  if (historica <= 0) {
+    throw new Error("A velocidade histórica deve ser maior que zero");
+  }
+
+  const percentualAtual = (atual / historica) * 100;
+  const percentualReducao = 100 - percentualAtual;
+
+  return percentualReducao;
+}
+
 export function getPercentageVisuals(
   currentTimeSeconds: number,
   historicTimeSeconds: number,
@@ -50,9 +73,14 @@ export function getPercentageVisuals(
   percentage: number;
   icon: React.ElementType;
 } {
-  const percentage = getTimePercentage(currentTimeSeconds, historicTimeSeconds);
+  // const percentage = () => ((historicTimeSeconds - currentTimeSeconds) /historicTimeSeconds) * 100
 
-  const icon = percentage >= 0 ? TrendingUpIcon : TrendingDownIcon;
+  const percentage = calcularPercentual(
+    currentTimeSeconds,
+    historicTimeSeconds,
+  );
+
+  const icon = percentage > 0 ? TrendingUpIcon : TrendingDownIcon;
 
   switch (true) {
     case percentage <= 30:

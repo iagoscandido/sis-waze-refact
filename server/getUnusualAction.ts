@@ -5,12 +5,25 @@ const sortByDelay = (a: Irregularity, b: Irregularity) => {
   return b.seconds + b.delaySeconds - (a.seconds + a.delaySeconds);
 };
 
+const sortByReduction = (a: Irregularity, b: Irregularity) => {
+  const calcReduction = (atual: number, historica: number): number => {
+    if (historica <= 0) return 0;
+    const percentualAtual = (atual / historica) * 100;
+    return 100 - percentualAtual; // % de redução
+  };
+
+  const reducaoA = calcReduction(a.speed, a.regularSpeed);
+  const reducaoB = calcReduction(b.speed, b.regularSpeed);
+
+  return reducaoB - reducaoA; // ordena do maior para o menor
+};
+
 export const getIrregularities = async () => {
   const wazeData = await getIrregularitiesData();
 
   if (!wazeData) throw new Error("No Waze data found");
 
-  return wazeData.irregularities.sort(sortByDelay);
+  return wazeData.irregularities.sort(sortByReduction);
 };
 
 export async function getIrregularitiesByCity(
