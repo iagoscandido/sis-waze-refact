@@ -11,7 +11,7 @@ export default function LegendPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">Mostrar Legenda</Button>
+        <Button variant="outline">Legenda</Button>
       </PopoverTrigger>
       <PopoverContent
         className="max-w-[300px] text-sm space-y-3 text-balance"

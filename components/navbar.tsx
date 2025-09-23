@@ -1,4 +1,7 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import Link from "next/link";
+import Cities from "@/app/(private)/dashboard/_components/cities";
+import Sort from "@/app/(private)/dashboard/_components/sort";
 import LegendPopover from "@/components/legend";
 import Logo from "@/components/logo";
 import MobileMenuIcon from "@/components/mobile-menu-icon";
@@ -6,166 +9,116 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+import { getQueryClient } from "@/lib/get-query-client";
 import { getCities } from "@/server/getUnusualAction";
 
-type NavItem = {
-  href?: string;
+// Navigation links array to be used in both desktop and mobile menus
+type NavigationLink = {
+  href: string;
   label: string;
-  submenu?: boolean;
-  type?: "icon" | "description" | "simple";
-  icon?: "BookOpenIcon" | "LifeBuoyIcon" | "InfoIcon";
-  description?: string;
-  items?: NavItem[];
+  active?: boolean;
 };
 
-const cities = await getCities();
-
-const navigationLinks: NavItem[] = [
+const navigationLinks: NavigationLink[] = [
   { href: "/dashboard", label: "Unusual" },
   { href: "/dashboard/waze-routes", label: "Rotas" },
-  {
-    label: "Tipo de visualização",
-    submenu: true,
-    type: "simple",
-    items: [
-      { href: "#", label: "Cards" },
-      { href: "#", label: "Tabela" },
-    ],
-  },
-  {
-    label: "Cidade",
-    submenu: true,
-    type: "simple",
-    items: cities.map((city) => ({
-      href: `dashboard/${city}`,
-      label: city,
-    })),
-  },
 ];
 
-export default function Navbar() {
+const Navbar = async () => {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["cities"],
+    queryFn: getCities,
+  });
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
-        <div className="flex items-center gap-2">
-          {/* Mobile menu trigger */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                className="group size-8 md:hidden"
-                variant="ghost"
-                size="icon"
-              >
-                {/* ... SVG do ícone do menu ... */}
-                <MobileMenuIcon />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-64 p-1 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link) => (
-                    <NavigationMenuItem key={link.label} className="w-full">
-                      {link.submenu ? (
-                        <>
-                          <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">
-                            {link.label}
-                          </div>
-                          <ul>
-                            {link.items?.map((item) => (
-                              <li key={item.label}>
-                                <NavigationMenuLink
-                                  href={item.href}
-                                  className="py-1.5"
-                                >
-                                  {item.label}
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </>
-                      ) : (
-                        <NavigationMenuLink href={link.href} className="py-1.5">
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <header className="border-b px-4 md:px-6">
+        <div className="flex h-16 items-center justify-between gap-4">
+          {/* Left side */}
+          <div className="flex items-center gap-2">
+            {/* Mobile menu trigger */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  className="group size-8 md:hidden"
+                  variant="ghost"
+                  size="icon"
+                >
+                  <MobileMenuIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-36 p-1 md:hidden">
+                <NavigationMenu className="max-w-none *:w-full">
+                  <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                    <NavigationMenuItem>
+                      <Cities />
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                      <Sort />
+                    </NavigationMenuItem>
+                    {navigationLinks.map((link) => (
+                      <NavigationMenuItem key={link.label} className="w-full">
+                        <NavigationMenuLink
+                          href={link.href}
+                          className="py-1.5"
+                          active={link.active}
+                        >
                           {link.label}
                         </NavigationMenuLink>
-                      )}
-                      {/* ... Lógica do separador ... */}
-                    </NavigationMenuItem>
-                  ))}
-                </NavigationMenuList>
-              </NavigationMenu>
-            </PopoverContent>
-          </Popover>
-          {/* Main nav */}
-          <div className="flex items-center gap-6">
-            <Link href="#" className="text-primary hover:text-primary/90">
-              <Logo />
-            </Link>
-            {/* Navigation menu */}
-            <NavigationMenu viewport={false} className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link) => (
-                  <NavigationMenuItem key={link.label}>
-                    {link.submenu ? (
-                      <>
-                        <NavigationMenuTrigger className="text-muted-foreground hover:text-primary bg-transparent px-2 py-1.5 font-medium *:[svg]:-me-0.5 *:[svg]:size-3.5">
-                          {link.label}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent className="data-[motion=from-end]:slide-in-from-right-16! data-[motion=from-start]:slide-in-from-left-16! data-[motion=to-end]:slide-out-to-right-16! data-[motion=to-start]:slide-out-to-left-16! z-50 p-1">
-                          <ul
-                            className={cn(
-                              link.type === "description"
-                                ? "min-w-64"
-                                : "min-w-48",
-                            )}
-                          >
-                            {link.items?.map((item) => (
-                              <li key={item.label}>
-                                <NavigationMenuLink
-                                  href={item.href}
-                                  className="py-1.5"
-                                >
-                                  {/* ... Lógica interna de renderização do item ... */}
-                                  {item.label}
-                                </NavigationMenuLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </PopoverContent>
+            </Popover>
+            {/* Main nav */}
+            <div className="flex items-center gap-6">
+              <Link href="#" className="text-primary hover:text-primary/90">
+                <Logo />
+              </Link>
+              {/* Navigation menu */}
+              <NavigationMenu className="max-md:hidden">
+                <NavigationMenuList className="gap-2">
+                  {navigationLinks.map((link) => (
+                    <NavigationMenuItem key={link.label}>
                       <NavigationMenuLink
+                        active={link.active}
                         href={link.href}
                         className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                       >
                         {link.label}
                       </NavigationMenuLink>
-                    )}
+                    </NavigationMenuItem>
+                  ))}
+                  <NavigationMenuItem>
+                    <Cities />
                   </NavigationMenuItem>
-                ))}
-                <NavigationMenuItem></NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+                  <NavigationMenuItem>
+                    <Sort />
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
+          </div>
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            <LegendPopover />
+            <ModeToggle />
           </div>
         </div>
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          <LegendPopover />
-          <ModeToggle />
-        </div>
-      </div>
-    </header>
+      </header>
+    </HydrationBoundary>
   );
-}
+};
+
+export { Navbar };

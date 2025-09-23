@@ -1,7 +1,7 @@
 import type React from "react";
 import { Suspense } from "react";
 import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { Navbar } from "@/components/navbar";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (

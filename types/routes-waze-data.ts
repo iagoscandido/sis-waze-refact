@@ -42,4 +42,15 @@ export interface Route {
 
   historicTime: number;
   time: number;
+
+  alternateRoute?: AlternateRoute;
+}
+
+export interface AlternateRoute {
+  // historicTime: number;
+  line: [x: number, y: number][];
+  name: string;
+  // length: number;
+  // jamLevel: number;
+  // time: number;
 }

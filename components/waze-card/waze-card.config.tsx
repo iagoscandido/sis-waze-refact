@@ -56,7 +56,7 @@ function calculateTimePercentage(currentTime: number, historicTime: number) {
 export function getPercentageVisuals(
   current: number,
   historic: number,
-  type: "speed" | "time" = "speed",
+  type: "irregularity" | "route" = "irregularity",
 ): {
   status: string;
   label: string;
@@ -66,7 +66,7 @@ export function getPercentageVisuals(
   icon: React.ElementType;
 } {
   const percentage =
-    type === "time"
+    type === "route"
       ? calculateTimePercentage(current, historic)
       : calculateSpeedPercentage(current, historic);
 

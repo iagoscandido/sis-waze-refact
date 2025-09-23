@@ -18,9 +18,8 @@ export type WazeCardProps = {
   title?: string;
   updatedAgo?: string;
 
+  type?: "irregularity" | "route";
   trend?: number;
-
-  type?: "speed" | "time";
 
   current: number;
   historic: number;
@@ -43,7 +42,7 @@ const WazeCard: FC<WazeCardProps> = ({
   action,
   metrics = [],
   trend = null,
-  type = "speed",
+  type = "irregularity",
 }) => {
   const trendVisuals = getTrendVisuals(trend);
   const PercentageVisuals = getPercentageVisuals(current, historic, type);
@@ -87,7 +86,7 @@ const WazeCard: FC<WazeCardProps> = ({
           {/* icons */}
           <div className="flex items-center gap-1">
             {/* Trend Icon */}
-            {trend && trendVisuals && (
+            {type === "irregularity" && trendVisuals && (
               <Badge
                 className={cn("text-white rounded-md", trendVisuals?.bgColor)}
               >

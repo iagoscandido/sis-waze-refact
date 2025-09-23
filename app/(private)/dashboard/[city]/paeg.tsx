@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { MapButton } from "@/components/map-button";
+import { Suspense, use } from "react";
+import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { getIrregularitiesByCity } from "@/server/getUnusualAction";
@@ -13,7 +13,10 @@ export default async function Citypage({
 }) {
   const city = decodeURIComponent(params.city);
 
-  const irregularities = (await getIrregularitiesByCity(city)) ?? [];
+  const irregularities = use(getIrregularitiesByCity(city)) ?? [];
+
+  console.log("city: ", city);
+  console.log("irregularities: ", irregularities);
 
   if (!irregularities || irregularities.length === 0)
     return (
@@ -95,7 +98,7 @@ export default async function Citypage({
                   },
                 ]}
                 action={
-                  <MapButton
+                  <MapButtonProps
                     fromLat={i.line[0].y}
                     fromLon={i.line[0]?.x}
                     toLat={i.line[i.line.length - 1].y}

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export const Footer = () => {
@@ -13,7 +12,6 @@ export const Footer = () => {
         >
           Dados fornecidos pelo Waze App. Saiba mais em Waze.com
         </Link>
-        <Image src="/waze-logo.png" alt="Waze Logo" width={24} height={24} />
       </div>
     </footer>
   );
