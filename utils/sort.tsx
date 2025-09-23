@@ -21,5 +21,5 @@ export const sortRoutesByReduction = (a: Route, b: Route) => {
   const reductionA = calcReduction(a.time, a.historicTime);
   const reductionB = calcReduction(b.time, b.historicTime);
 
-  return reductionB - reductionA;
+  return reductionA - reductionB;
 };
