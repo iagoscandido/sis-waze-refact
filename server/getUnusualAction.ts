@@ -1,25 +1,13 @@
 import { fetchIrregularitiesData } from "@/server/fetchIrregularitiesAction";
 import type { Irregularity } from "@/types/irregularities-waze-data";
-
-const sortByReduction = (a: Irregularity, b: Irregularity) => {
-  const calcReduction = (current: number, historic: number): number => {
-    if (historic <= 0) return 0;
-    const percentage = (current / historic) * 100;
-    return 100 - percentage;
-  };
-
-  const reductionA = calcReduction(a.speed, a.regularSpeed);
-  const reductionB = calcReduction(b.speed, b.regularSpeed);
-
-  return reductionB - reductionA;
-};
+import { sortIrregularitiesByReduction } from "@/utils/sort";
 
 export const getIrregularities = async () => {
   const wazeData = await fetchIrregularitiesData();
 
   if (!wazeData || !wazeData.irregularities) return [];
 
-  return wazeData.irregularities.sort(sortByReduction);
+  return wazeData.irregularities.sort(sortIrregularitiesByReduction);
 };
 
 export async function getIrregularitiesByCity(

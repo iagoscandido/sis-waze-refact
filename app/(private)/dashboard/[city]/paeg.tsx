@@ -39,7 +39,7 @@ export default async function Citypage({
                 trend={i.trend}
                 current={i.seconds}
                 historic={i.delaySeconds + i.seconds}
-                type="speed"
+                type="irregularity"
                 metrics={[
                   {
                     id: "traffic-desc",

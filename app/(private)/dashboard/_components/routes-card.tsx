@@ -33,7 +33,7 @@ export default function RoutesCard() {
             title={r.name}
             current={r.time}
             historic={r.historicTime}
-            type="time"
+            type="route"
             metrics={[
               {
                 id: "traffic-desc",

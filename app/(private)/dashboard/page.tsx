@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { getQueryClient } from "@/lib/get-query-client";
 import { getIrregularities } from "@/server/getUnusualAction";
 import IrregularitiesCard from "./_components/irregularities-card";
@@ -13,7 +14,9 @@ const IrregularitiesPage = async () => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <IrregularitiesCard />
+      <Suspense fallback={<p>Carregando...</p>}>
+        <IrregularitiesCard />
+      </Suspense>
     </HydrationBoundary>
   );
 };
