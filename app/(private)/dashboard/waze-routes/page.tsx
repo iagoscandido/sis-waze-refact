@@ -32,7 +32,7 @@ const Page = () => {
               value: `${(r.historicTime / 60).toFixed(0)} min`,
               group: "time",
             },
-            { id: "length", label: "Extensão", value: `${r.length} km` },
+            { id: "length", label: "Extensão", value: `${r.length / 1000} km` },
           ]}
           action={
             <MapButton
