@@ -12,7 +12,9 @@ const TREND_VISUALS_CONFIG = {
   increase: { label: "Piorando", bgColor: "bg-red-500", icon: MoveDownIcon },
 };
 
-export const getTrendVisuals = (trend: number) => {
+export const getTrendVisuals = (trend: number | null) => {
+  if (trend === null) return null;
+
   switch (trend) {
     case -1:
       return TREND_VISUALS_CONFIG.decrease;
@@ -20,8 +22,6 @@ export const getTrendVisuals = (trend: number) => {
       return TREND_VISUALS_CONFIG.stable;
     case 1:
       return TREND_VISUALS_CONFIG.increase;
-    default:
-      return TREND_VISUALS_CONFIG.stable;
   }
 };
 
@@ -38,33 +38,25 @@ export function getSeverityDescription(level: number): string {
   );
 }
 
-function calculateDelayPercentage(
-  delaySeconds: number,
-  seconds: number,
-): number {
-  if (seconds <= 0) {
-    return 0;
-  }
+function calculateSpeedPercentage(currentSpeed: number, historicSpeed: number) {
+  if (historicSpeed <= 0) return 0;
 
-  const percentage = (delaySeconds / seconds) * 100;
+  const currentPercentage = (currentSpeed / historicSpeed) * 100;
+  const ReductionPercentage = 100 - currentPercentage;
 
-  return percentage;
+  return ReductionPercentage;
 }
 
-function calcularPercentual(atual: number, historica: number) {
-  if (historica <= 0) {
-    throw new Error("A velocidade histórica deve ser maior que zero");
-  }
+function calculateTimePercentage(currentTime: number, historicTime: number) {
+  if (historicTime <= 0) return 0;
 
-  const percentualAtual = (atual / historica) * 100;
-  const percentualReducao = 100 - percentualAtual;
-
-  return percentualReducao;
+  return ((currentTime - historicTime) / historicTime) * 100;
 }
 
 export function getPercentageVisuals(
-  currentTimeSeconds: number,
-  historicTimeSeconds: number,
+  current: number,
+  historic: number,
+  type: "speed" | "time" = "speed",
 ): {
   status: string;
   label: string;
@@ -73,12 +65,10 @@ export function getPercentageVisuals(
   percentage: number;
   icon: React.ElementType;
 } {
-  // const percentage = () => ((historicTimeSeconds - currentTimeSeconds) /historicTimeSeconds) * 100
-
-  const percentage = calcularPercentual(
-    currentTimeSeconds,
-    historicTimeSeconds,
-  );
+  const percentage =
+    type === "time"
+      ? calculateTimePercentage(current, historic)
+      : calculateSpeedPercentage(current, historic);
 
   const icon = percentage > 0 ? TrendingUpIcon : TrendingDownIcon;
 

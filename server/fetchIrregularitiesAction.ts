@@ -1,8 +1,11 @@
 import type { WazeData } from "@/types/irregularities-waze-data";
 
-export async function getIrregularitiesData(): Promise<WazeData> {
-  const url =
-    "https://www.waze.com/row-partnerhub-api/partners/11633596527/waze-feeds/e8185b12-350b-47cc-88fd-44b72765d111";
+export async function fetchIrregularitiesData(): Promise<WazeData> {
+  if (!process.env.IRREGULARITIES)
+    throw Error(
+      "varialbe de ambiente para rotas não encontrada ou não definida"
+    );
+  const url = process.env.IRREGULARITIES;
 
   const res = await fetch(url, {
     cache: "no-store",

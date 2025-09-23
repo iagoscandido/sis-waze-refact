@@ -1,36 +1,23 @@
-import { NextResponse } from "next/server";
+import { fetchRoutesData } from "@/server/fetchRoutesAction";
+import type { Route } from "@/types/routes-waze-data";
 
-export async function fetchRoutes() {
-  try {
-    const url =
-      "https://www.waze.com/row-partnerhub-api/feeds-tvt/?id=11072621667";
-    const res = await fetch(url, {
-      next: { revalidate: 120 },
-    });
+const sortByReduction = (a: Route, b: Route) => {
+  const calcReduction = (current: number, historic: number): number => {
+    if (historic <= 0) return 0;
+    const percentage = (current / historic) * 100;
+    return 100 - percentage;
+  };
 
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: `Failed to fetch data: ${res.statusText}` },
-        { status: res.status }
-      );
-    }
+  const reductionA = calcReduction(a.time, a.historicTime);
+  const reductionB = calcReduction(b.time, b.historicTime);
 
-    const data = await res.json();
+  return reductionB - reductionA;
+};
 
-    return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message || "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-}
-// export async function getCities(): Promise<string[]> {
-//   const routes = await fetchRoutes();
+export const getRoutes = async (): Promise<Route[]> => {
+  const data = await fetchRoutesData();
 
-//   if (!routes) throw new Error("No Waze data found");
+  if (!data) throw new Error("No Waze data found");
 
-//   const cities = routes.map((irregularity) => irregularity.city);
-
-//   return Array.from(new Set(cities));
-// }
+  return data.routes.sort(sortByReduction);
+};

@@ -18,13 +18,12 @@ export type WazeCardProps = {
   title?: string;
   updatedAgo?: string;
 
-  severity?: number;
-  trend: number;
+  trend?: number;
 
-  length: number;
+  type?: "speed" | "time";
 
-  currentSpeed: number;
-  historicSpeed: number;
+  current: number;
+  historic: number;
 
   isNewData?: boolean;
   isUpdating?: boolean;
@@ -37,16 +36,17 @@ export type WazeCardProps = {
 const WazeCard: FC<WazeCardProps> = ({
   title,
 
-  currentSpeed,
-  historicSpeed,
+  current,
+  historic,
   isNewData = false,
   isUpdating = false,
   action,
   metrics = [],
-  trend,
+  trend = null,
+  type = "speed",
 }) => {
   const trendVisuals = getTrendVisuals(trend);
-  const PercentageVisuals = getPercentageVisuals(currentSpeed, historicSpeed);
+  const PercentageVisuals = getPercentageVisuals(current, historic, type);
 
   const visibleMetrics = metrics.filter(
     (m) => m.value != null && m.value !== "",
@@ -87,12 +87,14 @@ const WazeCard: FC<WazeCardProps> = ({
           {/* icons */}
           <div className="flex items-center gap-1">
             {/* Trend Icon */}
-            <Badge
-              className={cn("text-white rounded-md", trendVisuals.bgColor)}
-            >
-              {}
-              <trendVisuals.icon size={16} />
-            </Badge>
+            {trend && trendVisuals && (
+              <Badge
+                className={cn("text-white rounded-md", trendVisuals?.bgColor)}
+              >
+                {}
+                <trendVisuals.icon size={16} />
+              </Badge>
+            )}
             {/* Trending Percentage */}
             <Badge
               className={cn("text-white rounded-md", PercentageVisuals.badgeBg)}

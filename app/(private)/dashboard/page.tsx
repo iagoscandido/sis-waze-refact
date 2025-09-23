@@ -8,6 +8,14 @@ import { AlertTypeInfo } from "@/utils/mappers/alert-type-info";
 
 const DashboardPage = () => {
   const irregularities = use(getIrregularities());
+
+  if (irregularities.length === 0)
+    return (
+      <p className="text-center text-xl font-bold">
+        Nenhuma irregularidade encontrada no momento.
+      </p>
+    );
+
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
@@ -18,11 +26,9 @@ const DashboardPage = () => {
               <Suspense key={i.id} fallback={<p>Carregando Card...</p>}>
                 <WazeCard
                   title={i.street}
-                  length={i.length}
-                  severity={i.severity}
                   trend={i.trend}
-                  currentSpeed={i.speed}
-                  historicSpeed={i.regularSpeed}
+                  current={i.speed}
+                  historic={i.regularSpeed}
                   metrics={[
                     {
                       id: "traffic-desc",

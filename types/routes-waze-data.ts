@@ -13,15 +13,33 @@
 // updateTime
 // 1758549300110
 
+interface Bbox {
+  minY: number;
+  minX: number;
+  maxY: number;
+  maxX: number;
+}
 export interface RoutesWazeData {
   usersOnjam: [];
   routes: [];
   irregularities: [];
   broadcasterId: string;
   areaName: string;
-  bbox: {};
+  bbox: Bbox;
   name: string;
   isMetric: boolean;
   lengthOfJams: [];
   updateTime: number;
+}
+
+export interface Route {
+  id: string;
+  name: string;
+  jamLevel: number;
+  length: number;
+
+  bbox: Bbox;
+
+  historicTime: number;
+  time: number;
 }

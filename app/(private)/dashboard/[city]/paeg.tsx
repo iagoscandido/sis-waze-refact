@@ -13,10 +13,14 @@ export default async function Citypage({
 }) {
   const city = decodeURIComponent(params.city);
 
-  const irregularities = await getIrregularitiesByCity(city);
+  const irregularities = (await getIrregularitiesByCity(city)) ?? [];
 
   if (!irregularities || irregularities.length === 0)
-    return <p>Nenhuma irregularidade encontrada para {city} no momento.</p>;
+    return (
+      <p className="text-center text-xl font-bold">
+        Nenhuma irregularidade encontrada para {city} no momento.
+      </p>
+    );
 
   return (
     <div>
@@ -24,16 +28,15 @@ export default async function Citypage({
 
       <div>
         {irregularities
-          .filter((i) => i.city === city)
+          .filter((i) => i.city === city && i.line?.length > 0)
           .map((i) => (
             <Suspense key={i.id} fallback={<p>Carregando Card...</p>}>
               <WazeCard
                 title={i.street}
-                length={i.length}
-                severity={i.severity}
                 trend={i.trend}
-                currentSpeed={i.seconds}
-                historicSpeed={i.delaySeconds + i.seconds}
+                current={i.seconds}
+                historic={i.delaySeconds + i.seconds}
+                type="speed"
                 metrics={[
                   {
                     id: "traffic-desc",

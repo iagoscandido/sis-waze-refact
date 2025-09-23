@@ -33,9 +33,8 @@ type NavItem = {
 const cities = await getCities();
 
 const navigationLinks: NavItem[] = [
-  { href: "/", label: "Home" },
-  { href: "#", label: "Unusual" },
-  { href: "#", label: "Rotas" },
+  { href: "/dashboard", label: "Unusual" },
+  { href: "/dashboard/waze-routes", label: "Rotas" },
   {
     label: "Tipo de visualização",
     submenu: true,

@@ -1,27 +1,23 @@
-import { getIrregularitiesData } from "@/server/getIrregularitiesAction";
+import { fetchIrregularitiesData } from "@/server/fetchIrregularitiesAction";
 import type { Irregularity } from "@/types/irregularities-waze-data";
 
-const sortByDelay = (a: Irregularity, b: Irregularity) => {
-  return b.seconds + b.delaySeconds - (a.seconds + a.delaySeconds);
-};
-
 const sortByReduction = (a: Irregularity, b: Irregularity) => {
-  const calcReduction = (atual: number, historica: number): number => {
-    if (historica <= 0) return 0;
-    const percentualAtual = (atual / historica) * 100;
-    return 100 - percentualAtual; // % de redução
+  const calcReduction = (current: number, historic: number): number => {
+    if (historic <= 0) return 0;
+    const percentage = (current / historic) * 100;
+    return 100 - percentage;
   };
 
-  const reducaoA = calcReduction(a.speed, a.regularSpeed);
-  const reducaoB = calcReduction(b.speed, b.regularSpeed);
+  const reductionA = calcReduction(a.speed, a.regularSpeed);
+  const reductionB = calcReduction(b.speed, b.regularSpeed);
 
-  return reducaoB - reducaoA; // ordena do maior para o menor
+  return reductionB - reductionA;
 };
 
 export const getIrregularities = async () => {
-  const wazeData = await getIrregularitiesData();
+  const wazeData = await fetchIrregularitiesData();
 
-  if (!wazeData) throw new Error("No Waze data found");
+  if (!wazeData || !wazeData.irregularities) return [];
 
   return wazeData.irregularities.sort(sortByReduction);
 };
@@ -49,13 +45,11 @@ export async function getIrregularitiesByCity(
 }
 
 export async function getCities(): Promise<string[]> {
-  const wazeData = await getIrregularitiesData();
+  const data = await fetchIrregularitiesData();
 
-  if (!wazeData) throw new Error("No Waze data found");
+  if (!data || !data.irregularities) return [];
 
-  const cities = wazeData.irregularities.map(
-    (irregularity) => irregularity.city
-  );
+  const cities = data.irregularities.map((irregularity) => irregularity.city);
 
   return Array.from(new Set(cities));
 }
