@@ -1,8 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import {
   Select,
   SelectContent,
