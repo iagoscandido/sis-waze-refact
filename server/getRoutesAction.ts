@@ -1,8 +1,8 @@
 import { fetchRoutesData } from "@/server/fetchRoutesAction";
-import type { Route } from "@/types/routes-waze-data";
+import type { JsonResponseRoute } from "@/types/json-response-waze-routes";
 import { sortRoutesByReduction } from "@/utils/sort";
 
-export const getRoutes = async (): Promise<Route[]> => {
+export const getRoutes = async (): Promise<JsonResponseRoute[]> => {
   const data = await fetchRoutesData();
 
   if (!data) throw new Error("No Waze data found");

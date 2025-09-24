@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
+import Providers from "@/lib/providers";
 import "./globals.css";
-import Providers from "@/app/providers";
-import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Plataforma de monitoramento",
@@ -28,14 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Providers>{children}</Providers>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

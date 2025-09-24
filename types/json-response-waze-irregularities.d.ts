@@ -1,4 +1,4 @@
-export interface IrregularitiesWazeData {
+export interface JsonResponseIrregularitiesWazeData {
   // Informações gerais: carimbo de data/hora do arquivo, área geográfica de onde os dados foram extraídos etc.
   startTime: string;
   endTime: string;
@@ -6,43 +6,43 @@ export interface IrregularitiesWazeData {
   endTimeMillis: number;
 
   // Alertas de trânsito: incidentes de trânsito enviados pelos usuários.
-  alerts: Alert[];
+  alerts: JsonResponseAlert[];
 
   // Trânsito fora do normal (irregularidades): alertas e congestionamentos que afetam um número excepcionalmente grande de usuários.
-  irregularities: Irregularity[];
+  irregularities: JsonResponseIrregularity[];
 
   // Engarrafamentos: informações sobre a lentidão do trânsito geradas pelo serviço com base na localização e na velocidade dos usuários.
-  jams: Jam[];
+  jams: JsonResponseJam[];
 }
 
-export interface Jam {
+export interface JsonResponseJam {
   uuid: string;
   city: string;
   type: string;
 }
 
-export interface Alert {
+export interface JsonResponseAlert {
   uuid: string;
   type: string;
   subType?: string;
-  location: Line;
+  location: JsonResponseLine;
 }
 
-export interface Irregularity {
+export interface JsonResponseIrregularity {
   id: string;
 
   city: string;
   street: string;
 
   trend: -1 | 0 | 1; // -1 melhorando, 0 constante, 1 piorando
-  line: Line[];
+  line: JsonResponseLine[];
 
   driversCount: number; // Número de Wazers na irregularidade
   alertsCount: number; // Quantidade de alertas dos usuários do Waze em trechos da irregularidade
 
   length: number; // Extensão da irregularidade
 
-  causeAlert?: Alert;
+  causeAlert?: JsonResponseAlert;
 
   jamLevel: 1 | 2 | 3 | 4;
   severity: 0 | 1 | 2 | 3 | 4 | 5;
@@ -71,7 +71,7 @@ export interface Irregularity {
   endNode?: string;
 }
 
-interface Line {
+interface JsonResponseLine {
   x: number;
   y: number;
 }

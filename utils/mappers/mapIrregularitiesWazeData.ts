@@ -1,12 +1,12 @@
 // Classe utilitaria para mapear o json recebido do waze e assim reduzir o payload,
 // alénm de implementar alguns atributos utilitários
 import type {
-  IrregularitiesWazeData,
-  Irregularity,
-} from "@/types/irregularities-waze-data";
+  JsonResponseIrregularitiesWazeData,
+  JsonResponseIrregularity,
+} from "@/types/json-response-waze-irregularities";
 import { calculateSpeedPercentage } from "@/utils/calcs";
 
-interface MappedIrregularities {
+export interface MappedIrregularities {
   id: string;
   city: string;
   street: string;
@@ -25,7 +25,7 @@ export type MappedIrregularitiesWazeData = {
 };
 
 export function mapIrregularitiesWazeData(
-  data: IrregularitiesWazeData
+  data: JsonResponseIrregularitiesWazeData
 ): MappedIrregularitiesWazeData {
   const irregularities = data.irregularities
     .map(mapIrregularities)
@@ -37,7 +37,7 @@ export function mapIrregularitiesWazeData(
 }
 
 const mapIrregularities = (
-  irregularity: Irregularity
+  irregularity: JsonResponseIrregularity
 ): MappedIrregularities => {
   const reduction = calculateSpeedPercentage(
     irregularity.speed,

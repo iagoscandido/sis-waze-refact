@@ -1,7 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-
 import {
   Select,
   SelectContent,
@@ -9,26 +7,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getCities } from "@/server/getUnusualAction";
+
+import { useCities } from "@/hooks/useCities";
 
 const Cities = () => {
-  const { data: cities, isLoading } = useQuery({
-    queryKey: ["cities"],
-    queryFn: getCities,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-  });
+  const { data: cities, isLoading } = useCities();
 
   if (isLoading) return <p>Carregando...</p>;
   if (!cities) return <p>Nenhuma cidade encontrada no momento.</p>;
+
   return (
-    <Select defaultValue="Rio de Janeiro" disabled>
+    <Select defaultValue="Rio de Janeiro" indicatorPosition="right">
       <SelectTrigger>
         <SelectValue placeholder="Cidade" />
       </SelectTrigger>
       <SelectContent defaultValue={"Rio de Janeiro"}>
         {cities.map((city) => (
-          <SelectItem key={city} value={city}>
+          <SelectItem key={city} value={city} disabled>
             {city}
           </SelectItem>
         ))}

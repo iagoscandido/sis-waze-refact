@@ -1,13 +1,19 @@
 // Classe utilitaria para mapear o json recebido do waze e assim reduzir o payload,
 // alénm de implementar alguns atributos utilitários
-import type { Route, RoutesWazeData } from "@/types/routes-waze-data";
+import type {
+  JsonResponseRoute,
+  JsonResponseRoutesWazeData,
+} from "@/types/json-response-waze-routes";
 import { calculateTimePercentage } from "../calcs";
 
-interface MappedRoutes {
+export interface MappedRoutes {
   id: string;
 
   name: string;
+
   jamLevel: number;
+
+  length: number;
   bbox: {
     minY: number;
     minX: number;
@@ -25,7 +31,7 @@ export type MappedRoutesWazeData = {
 };
 
 export const mapRoutesWazeData = (
-  data: RoutesWazeData
+  data: JsonResponseRoutesWazeData
 ): MappedRoutesWazeData => {
   const routes = data.routes
     .map(mapRoutes)
@@ -36,7 +42,7 @@ export const mapRoutesWazeData = (
   };
 };
 
-const mapRoutes = (route: Route) => {
+const mapRoutes = (route: JsonResponseRoute): MappedRoutes => {
   const reduction = calculateTimePercentage(route.time, route.historicTime);
 
   return {
@@ -44,7 +50,7 @@ const mapRoutes = (route: Route) => {
     name: route.name,
 
     bbox: route.bbox,
-
+    length: route.length,
     jamLevel: route.jamLevel,
     alternativeRoute: route.alternateRoute?.name,
 

@@ -18,8 +18,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { getCities } from "@/lib/fetchers/cities";
 import { getQueryClient } from "@/lib/get-query-client";
-import { getCities } from "@/server/getUnusualAction";
 
 // Navigation links array to be used in both desktop and mobile menus
 type NavigationLink = {

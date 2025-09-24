@@ -1,21 +1,15 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
-import { getIrregularities } from "@/server/getUnusualAction";
+import { useIrregularities } from "@/hooks/useIrregularities";
+import type { JsonResponseIrregularity } from "@/types/json-response-waze-irregularities";
 import { AlertSubTypeInfo } from "@/utils/mappers/alert-sub-type-info";
 import { AlertTypeInfo } from "@/utils/mappers/alert-type-info";
 
 export default function IrregularitiesCard() {
-  const { data: irregularities, isLoading } = useQuery({
-    queryKey: ["irregularities"],
-    queryFn: getIrregularities,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchInterval: 1000 * 120,
-  });
+  const { data: irregularities, isLoading } = useIrregularities();
   if (isLoading) return <p>Carregando...</p>;
 
   if (!irregularities || irregularities.length === 0)
@@ -30,13 +24,17 @@ export default function IrregularitiesCard() {
         <p>Irregularidades: {irregularities.length}</p>
         <p>
           Irregularidades no Rio de Janeiro:{" "}
-          {irregularities.filter((i) => i.city === "Rio de Janeiro").length}
+          {
+            irregularities.filter(
+              (i: JsonResponseIrregularity) => i.city === "Rio de Janeiro",
+            ).length
+          }
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {irregularities
-          .filter((i) => i.city === "Rio de Janeiro")
-          .map((i) => (
+          .filter((i: JsonResponseIrregularity) => i.city === "Rio de Janeiro")
+          .map((i: JsonResponseIrregularity) => (
             <WazeCard
               key={i.id}
               title={i.street}

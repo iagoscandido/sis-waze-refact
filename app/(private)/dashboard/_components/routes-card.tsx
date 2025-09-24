@@ -1,19 +1,13 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
-import { getRoutes } from "@/server/getRoutesAction";
+import { useWazeRoutes } from "@/hooks/useRoutes";
+import type { MappedRoutes } from "@/utils/mappers/mapRoutesWazeData";
 
 export default function RoutesCard() {
-  const { data: routes, isLoading } = useQuery({
-    queryKey: ["routes"],
-    queryFn: getRoutes,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
+  const { data: routes, isLoading } = useWazeRoutes();
   if (isLoading) return <p>Carregando...</p>;
 
   if (!routes || routes.length === 0)
@@ -28,7 +22,7 @@ export default function RoutesCard() {
         <p>routas: {routes.length}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
-        {routes.map((r) => (
+        {routes.map((r: MappedRoutes) => (
           <WazeCard
             key={r.id}
             title={r.name}

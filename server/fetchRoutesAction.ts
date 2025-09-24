@@ -1,6 +1,6 @@
-import type { RoutesWazeData } from "@/types/routes-waze-data";
+import type { JsonResponseRoutesWazeData } from "@/types/json-response-waze-routes";
 
-export async function fetchRoutesData(): Promise<RoutesWazeData> {
+export async function fetchRoutesData(): Promise<JsonResponseRoutesWazeData> {
   if (!process.env.ROUTES)
     throw Error(
       "varialbe de ambiente para rotas não encontrada ou não definida"

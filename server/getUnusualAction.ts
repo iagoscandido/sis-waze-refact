@@ -1,5 +1,5 @@
 import { fetchIrregularitiesWazeData } from "@/server/fetchIrregularitiesAction";
-import type { Irregularity } from "@/types/irregularities-waze-data";
+import type { JsonResponseIrregularity } from "@/types/json-response-waze-irregularities";
 import { sortIrregularitiesByReduction } from "@/utils/sort";
 
 export const getIrregularities = async () => {
@@ -12,7 +12,7 @@ export const getIrregularities = async () => {
 
 export async function getIrregularitiesByCity(
   city: string
-): Promise<Irregularity[] | null> {
+): Promise<JsonResponseIrregularity[] | null> {
   if (!city) {
     console.error("City is required for filtering.");
     return null;
@@ -30,14 +30,4 @@ export async function getIrregularitiesByCity(
   );
 
   return filteredIrregularities;
-}
-
-export async function getCities(): Promise<string[]> {
-  const data = await fetchIrregularitiesWazeData();
-
-  if (!data || !data.irregularities) return [];
-
-  const cities = data.irregularities.map((irregularity) => irregularity.city);
-
-  return Array.from(new Set(cities));
 }
