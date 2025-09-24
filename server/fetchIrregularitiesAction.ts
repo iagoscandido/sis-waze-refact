@@ -1,6 +1,6 @@
-import type { WazeData } from "@/types/irregularities-waze-data";
+import type { IrregularitiesWazeData } from "@/types/irregularities-waze-data";
 
-export async function fetchIrregularitiesData(): Promise<WazeData> {
+export async function fetchIrregularitiesWazeData(): Promise<IrregularitiesWazeData> {
   if (!process.env.IRREGULARITIES)
     throw Error(
       "varialbe de ambiente para rotas não encontrada ou não definida"
@@ -8,7 +8,7 @@ export async function fetchIrregularitiesData(): Promise<WazeData> {
   const url = process.env.IRREGULARITIES;
 
   const res = await fetch(url, {
-    cache: "no-store",
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) {
