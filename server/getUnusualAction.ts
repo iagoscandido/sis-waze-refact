@@ -1,9 +1,9 @@
-import { fetchIrregularitiesData } from "@/server/fetchIrregularitiesAction";
+import { fetchIrregularitiesWazeData } from "@/server/fetchIrregularitiesAction";
 import type { Irregularity } from "@/types/irregularities-waze-data";
 import { sortIrregularitiesByReduction } from "@/utils/sort";
 
 export const getIrregularities = async () => {
-  const wazeData = await fetchIrregularitiesData();
+  const wazeData = await fetchIrregularitiesWazeData();
 
   if (!wazeData || !wazeData.irregularities) return [];
 
@@ -33,7 +33,7 @@ export async function getIrregularitiesByCity(
 }
 
 export async function getCities(): Promise<string[]> {
-  const data = await fetchIrregularitiesData();
+  const data = await fetchIrregularitiesWazeData();
 
   if (!data || !data.irregularities) return [];
 
