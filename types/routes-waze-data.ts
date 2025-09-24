@@ -37,7 +37,7 @@ export interface Route {
   name: string;
   jamLevel: number;
   length: number;
-
+  city: string;
   bbox: Bbox;
 
   historicTime: number;
