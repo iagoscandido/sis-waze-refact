@@ -12,8 +12,9 @@ export default function IrregularitiesCard() {
   const { data: irregularities, isLoading } = useQuery({
     queryKey: ["irregularities"],
     queryFn: getIrregularities,
-    refetchOnWindowFocus: true,
     refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchInterval: 1000 * 120,
   });
   if (isLoading) return <p>Carregando...</p>;
 
