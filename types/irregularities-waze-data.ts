@@ -1,4 +1,4 @@
-export interface WazeData {
+export interface IrregularitiesWazeData {
   // Informações gerais: carimbo de data/hora do arquivo, área geográfica de onde os dados foram extraídos etc.
   startTime: string;
   endTime: string;
