@@ -6,8 +6,20 @@ import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useIrregularities } from "@/hooks/useIrregularities";
 
-export default function IrregularitiesCard() {
-  const { data: irregularities, isPending } = useIrregularities();
+export default function IrregularitiesCard({
+  sort,
+  page,
+  limit,
+}: {
+  sort: string;
+  page: number;
+  limit: number;
+}) {
+  const { data: irregularities, isPending } = useIrregularities({
+    sort,
+    page,
+    limit,
+  });
   if (isPending)
     return (
       <p>

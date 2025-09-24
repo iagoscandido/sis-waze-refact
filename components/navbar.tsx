@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import Cities from "@/app/(private)/dashboard/_components/cities";
 import Sort from "@/app/(private)/dashboard/_components/sort";
 import LegendPopover from "@/components/legend";
@@ -30,7 +31,11 @@ const navigationLinks: NavigationLink[] = [
   { href: "/dashboard/waze-routes", label: "Rotas" },
 ];
 
-const Navbar = async () => {
+const Navbar = async ({ searchParams }: { searchParams?: any }) => {
+  const sort = (searchParams?.sort as string) ?? "percentage";
+  const page = parseInt((searchParams?.page as string) ?? "1", 10);
+  const limit = parseInt((searchParams?.limit as string) ?? "20", 10);
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -51,10 +56,14 @@ const Navbar = async () => {
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   <NavigationMenuItem>
-                    <Cities />
+                    <Suspense>
+                      <Cities />
+                    </Suspense>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <Sort />
+                    <Suspense>
+                      <Sort currentSort={sort} />
+                    </Suspense>
                   </NavigationMenuItem>
                   {navigationLinks.map((link) => (
                     <NavigationMenuItem key={link.label} className="w-full">
@@ -91,10 +100,14 @@ const Navbar = async () => {
                   </NavigationMenuItem>
                 ))}
                 <NavigationMenuItem>
-                  <Cities />
+                  <Suspense>
+                    <Cities />
+                  </Suspense>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Sort />
+                  <Suspense>
+                    <Sort currentSort={sort} />
+                  </Suspense>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>

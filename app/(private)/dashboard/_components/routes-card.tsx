@@ -3,10 +3,18 @@
 import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
-import { useWazeRoutes } from "@/hooks/useRoutes";
+import { useWazeRoutes } from "@/hooks/useWazeRoutes";
 
-export default function RoutesCard() {
-  const { data: routes, isLoading } = useWazeRoutes();
+export default function RoutesCard({
+  sort,
+  page,
+  limit,
+}: {
+  sort: string;
+  page: number;
+  limit: number;
+}) {
+  const { data: routes, isLoading } = useWazeRoutes({ sort, page, limit });
   if (isLoading) return <p>Carregando...</p>;
 
   if (!routes || routes.length === 0)
@@ -16,10 +24,6 @@ export default function RoutesCard() {
       </p>
     );
 
-  if (!Array.isArray(routes)) {
-    console.error("Dados inválidos:", routes);
-    return <p>Erro: dados inválidos</p>;
-  }
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">

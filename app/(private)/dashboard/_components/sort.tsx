@@ -14,11 +14,13 @@ type SortOption = {
   value: string;
 };
 
-const Sort = () => {
+type SortProps = {
+  currentSort: string;
+};
+
+const Sort = ({ currentSort }: SortProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const currentSort = searchParams.get("sort") ?? "percentage";
 
   const handleChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
