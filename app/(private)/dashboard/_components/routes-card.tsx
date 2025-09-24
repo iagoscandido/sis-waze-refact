@@ -4,7 +4,6 @@ import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useWazeRoutes } from "@/hooks/useRoutes";
-import type { MappedRoutes } from "@/utils/mappers/mapRoutesWazeData";
 
 export default function RoutesCard() {
   const { data: routes, isLoading } = useWazeRoutes();
@@ -16,13 +15,18 @@ export default function RoutesCard() {
         Nenhuma rota encontrada no momento.
       </p>
     );
+
+  if (!Array.isArray(routes)) {
+    console.error("Dados inválidos:", routes);
+    return <p>Erro: dados inválidos</p>;
+  }
   return (
     <div>
       <div className="flex items-center justify-center gap-2">
         <p>routas: {routes.length}</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
-        {routes.map((r: MappedRoutes) => (
+        {routes.map((r) => (
           <WazeCard
             key={r.id}
             title={r.name}
