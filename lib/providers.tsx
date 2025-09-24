@@ -1,6 +1,7 @@
 "use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Analytics } from "@vercel/analytics/next";
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import { ThemeProvider } from "@/components/theme-provider";
 import { getQueryClient } from "@/lib/get-query-client";
@@ -20,6 +21,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
+        <Analytics />
         {children}
       </ThemeProvider>
     </QueryClientProvider>
