@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
@@ -10,8 +11,8 @@ export default function RoutesCard() {
   const { data: routes, isLoading } = useQuery({
     queryKey: ["routes"],
     queryFn: getRoutes,
-    refetchOnWindowFocus: true,
     refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
   if (isLoading) return <p>Carregando...</p>;
 
@@ -40,7 +41,6 @@ export default function RoutesCard() {
                 label: "Tráfego",
                 value: `${getSeverityDescription(r.jamLevel)}`,
               },
-
               {
                 id: "current-time",
                 label: "Tempo atual",
