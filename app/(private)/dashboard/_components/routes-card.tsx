@@ -22,9 +22,6 @@ export default function RoutesCard() {
   }
   return (
     <div>
-      <div className="flex items-center justify-center gap-2">
-        <p>routas: {routes.length}</p>
-      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {routes.map((r) => (
           <WazeCard
@@ -55,6 +52,11 @@ export default function RoutesCard() {
                 id: "lentgh",
                 label: "Extensão",
                 value: `${(r.length * 0.001).toFixed(3)} km`,
+              },
+              {
+                id: "alternative-route",
+                label: "Rota Alternativa",
+                value: r.alternativeRoute,
               },
             ]}
             action={

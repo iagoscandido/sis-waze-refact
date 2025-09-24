@@ -9,7 +9,7 @@ export default function IrregularitiesCard() {
   const { data: irregularities, isLoading } = useIrregularities();
   if (isLoading) return <p>Carregando...</p>;
 
-  if (!irregularities || irregularities.length === 0)
+  if (!irregularities)
     return (
       <p className="text-center text-xl font-bold">
         Nenhuma irregularidade encontrada no momento.
