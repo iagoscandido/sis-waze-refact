@@ -18,6 +18,9 @@ export interface MappedIrregularities {
   delayTimeSeconds: number;
   reductionPercentage: number;
   coordinates: { lat: number; lng: number }[];
+  trend: number;
+  length: number;
+  severity: number;
 }
 
 export type MappedIrregularitiesWazeData = {
@@ -63,5 +66,9 @@ const mapIrregularities = (
     currentTimeSeconds: irregularity.seconds,
 
     reductionPercentage: reduction,
+
+    trend: irregularity.trend,
+    length: irregularity.length,
+    severity: irregularity.severity,
   };
 };

@@ -4,9 +4,6 @@ import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useIrregularities } from "@/hooks/useIrregularities";
-import type { JsonResponseIrregularity } from "@/types/json-response-waze-irregularities";
-import { AlertSubTypeInfo } from "@/utils/mappers/alert-sub-type-info";
-import { AlertTypeInfo } from "@/utils/mappers/alert-type-info";
 
 export default function IrregularitiesCard() {
   const { data: irregularities, isLoading } = useIrregularities();
@@ -24,23 +21,19 @@ export default function IrregularitiesCard() {
         <p>Irregularidades: {irregularities.length}</p>
         <p>
           Irregularidades no Rio de Janeiro:{" "}
-          {
-            irregularities.filter(
-              (i: JsonResponseIrregularity) => i.city === "Rio de Janeiro",
-            ).length
-          }
+          {irregularities.filter((i) => i.city === "Rio de Janeiro").length}
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {irregularities
-          .filter((i: JsonResponseIrregularity) => i.city === "Rio de Janeiro")
-          .map((i: JsonResponseIrregularity) => (
+          .filter((i) => i.city === "Rio de Janeiro")
+          .map((i) => (
             <WazeCard
               key={i.id}
               title={i.street}
               trend={i.trend}
-              current={i.speed}
-              historic={i.regularSpeed}
+              current={i.CurrentSpeed}
+              historic={i.historicSpeed}
               metrics={[
                 {
                   id: "traffic-desc",
@@ -50,58 +43,50 @@ export default function IrregularitiesCard() {
                 {
                   id: "cause",
                   label: "Motivo",
-                  value: i.causeAlert
-                    ? AlertTypeInfo[
-                        i.causeAlert.type as keyof typeof AlertTypeInfo
-                      ].label
-                    : "",
+                  value: i.cause,
                   group: "cause",
                 },
 
                 {
                   id: "cause_subtype",
                   label: "Subtipo",
-                  value: i.causeAlert?.subType
-                    ? AlertSubTypeInfo[
-                        i.causeAlert.subType as keyof typeof AlertSubTypeInfo
-                      ].label
-                    : "",
+                  value: i.subCause,
                   group: "cause",
                 },
-                {
-                  id: "start-node",
-                  label: "Inicio",
-                  value: i.startNode ?? "",
-                  group: "route-node",
-                },
-                {
-                  id: "end-node",
-                  label: "Fim",
-                  value: i.endNode ?? "",
-                  group: "route-node",
-                },
+                // {
+                //   id: "start-node",
+                //   label: "Inicio",
+                //   value: i.startNode ?? "",
+                //   group: "route-node",
+                // },
+                // {
+                //   id: "end-node",
+                //   label: "Fim",
+                //   value: i.endNode ?? "",
+                //   group: "route-node",
+                // },
                 {
                   id: "current-speed",
                   label: "Velocidade atual",
-                  value: `${(i.speed).toFixed(2)} km/h`,
+                  value: `${(i.CurrentSpeed).toFixed(2)} km/h`,
                   group: "speed",
                 },
                 {
                   id: "regular-speed",
                   label: "Velocidade histórica",
-                  value: `${(i.regularSpeed).toFixed(2)} km/h`,
+                  value: `${(i.historicSpeed).toFixed(2)} km/h`,
                   group: "speed",
                 },
                 {
                   id: "current-time",
                   label: "Tempo atual",
-                  value: `${(i.seconds / 60).toFixed(0)} min`,
+                  value: `${(i.currentTimeSeconds / 60).toFixed(0)} min`,
                   group: "time",
                 },
                 {
                   id: "delay-time",
                   label: "Tempo Histórico",
-                  value: `${((i.seconds - i.delaySeconds) / 60).toFixed(0)} min`,
+                  value: `${((i.currentTimeSeconds - i.delayTimeSeconds) / 60).toFixed(0)} min`,
                   group: "time",
                 },
                 {
@@ -112,10 +97,10 @@ export default function IrregularitiesCard() {
               ]}
               action={
                 <MapButtonProps
-                  fromLat={i.line[0].y}
-                  fromLon={i.line[0]?.x}
-                  toLat={i.line[i.line.length - 1].y}
-                  toLon={i.line[i.line.length - 1].x}
+                  fromLat={i.coordinates[0].lat}
+                  fromLon={i.coordinates[0].lng}
+                  toLat={i.coordinates[i.coordinates.length - 1].lat}
+                  toLon={i.coordinates[i.coordinates.length - 1].lng}
                 />
               }
             />
