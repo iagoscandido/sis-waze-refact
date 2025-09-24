@@ -1,14 +1,19 @@
 "use client";
 
+import { LoaderCircleIcon } from "lucide-react";
 import { MapButtonProps } from "@/components/map-button";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useIrregularities } from "@/hooks/useIrregularities";
 
 export default function IrregularitiesCard() {
-  const { data: irregularities, isLoading } = useIrregularities();
-  if (isLoading) return <p>Carregando...</p>;
-
+  const { data: irregularities, isPending } = useIrregularities();
+  if (isPending)
+    return (
+      <p>
+        <LoaderCircleIcon />
+      </p>
+    );
   if (!irregularities)
     return (
       <p className="text-center text-xl font-bold">
@@ -17,13 +22,6 @@ export default function IrregularitiesCard() {
     );
   return (
     <div>
-      <div className="flex items-center justify-center gap-2">
-        <p>Irregularidades: {irregularities.length}</p>
-        <p>
-          Irregularidades no Rio de Janeiro:{" "}
-          {irregularities.filter((i) => i.city === "Rio de Janeiro").length}
-        </p>
-      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {irregularities
           .filter((i) => i.city === "Rio de Janeiro")

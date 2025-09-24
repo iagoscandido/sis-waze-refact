@@ -6,5 +6,6 @@ export function useCities() {
   return useQuery({
     queryKey: ["cities"],
     queryFn: getCities,
+    refetchOnWindowFocus: true,
   });
 }

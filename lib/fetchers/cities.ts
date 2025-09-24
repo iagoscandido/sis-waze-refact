@@ -1,7 +1,10 @@
 const getCities = async (): Promise<string[]> => {
-  const res = await fetch("/api/cities");
+  const res = await fetch("/api/irregularities");
 
-  return res.json();
+  const json = await res.json();
+
+  const cities = json.cities;
+  return cities;
 };
 
 export { getCities };

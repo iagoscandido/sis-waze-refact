@@ -28,6 +28,7 @@ export interface MappedRoutes {
 
 export type MappedRoutesWazeData = {
   routes: MappedRoutes[];
+  updateTime: number;
 };
 
 export const mapRoutesWazeData = (
@@ -37,8 +38,11 @@ export const mapRoutesWazeData = (
     .map(mapRoutes)
     .sort((a, b) => b.reductionPercentage - a.reductionPercentage);
 
+  const updateTime = data.updateTime;
+
   return {
     routes,
+    updateTime,
   };
 };
 

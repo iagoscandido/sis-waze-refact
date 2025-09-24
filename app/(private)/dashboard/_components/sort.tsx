@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -14,16 +15,33 @@ type SortOption = {
 };
 
 const Sort = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentSort = searchParams.get("sort") ?? "percentage";
+
+  const handleChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("sort", value);
+    router.push(`?${params.toString()}`);
+  };
+
   const sortOptions: SortOption[] = [
-    { label: "Maior Percentual", value: "maior" },
-    { label: "Menor Percentual", value: "menor" },
+    { label: "Percentual", value: "percentage" },
+    { label: "A-Z", value: "alphabetic" },
+    { label: "Extensão", value: "length" },
   ];
   return (
-    <Select indicatorPosition="right">
+    <Select
+      value={currentSort}
+      onValueChange={handleChange}
+      defaultValue="percentage"
+      indicatorPosition="right"
+    >
       <SelectTrigger>
         <SelectValue placeholder="Ordenar por" />
       </SelectTrigger>
-      <SelectContent defaultValue={"Maior Percentual"}>
+      <SelectContent defaultValue={"percentage"}>
         {sortOptions.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}

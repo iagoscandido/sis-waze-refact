@@ -1,5 +1,6 @@
 "use client";
 
+import { LoaderCircleIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -7,13 +8,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { useCities } from "@/hooks/useCities";
 
 const Cities = () => {
-  const { data: cities, isLoading } = useCities();
+  const { data: cities, isPending } = useCities();
 
-  if (isLoading) return <p>Carregando...</p>;
+  if (isPending)
+    return (
+      <p>
+        <LoaderCircleIcon />
+      </p>
+    );
+
   if (!cities) return <p>Nenhuma cidade encontrada no momento.</p>;
 
   return (
