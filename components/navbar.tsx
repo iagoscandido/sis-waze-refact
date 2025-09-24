@@ -32,7 +32,7 @@ const navigationLinks: NavigationLink[] = [
 ];
 
 const Navbar = async ({ searchParams }: { searchParams?: any }) => {
-  const sort = (searchParams?.sort as string) ?? "percentage";
+  const sort = (searchParams?.sort as string) ?? "";
   const page = parseInt((searchParams?.page as string) ?? "1", 10);
   const limit = parseInt((searchParams?.limit as string) ?? "20", 10);
 

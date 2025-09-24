@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const limit = parseInt(searchParams.get("limit") ?? "20", 10);
-    const sort = searchParams.get("sort") ?? "percentage";
+    const sort = searchParams.get("sort") ?? "";
 
     const data = await fetchRoutesData();
 

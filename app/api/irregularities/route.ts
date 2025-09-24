@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") ?? "1", 10);
     const limit = parseInt(searchParams.get("limit") ?? "20", 10);
     const city = searchParams.get("city");
-    const sort = searchParams.get("sort") ?? "percentage";
+    const sort = searchParams.get("sort") ?? "";
 
     const data = await fetchIrregularitiesWazeData();
 
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
     const cities = [...new Set(filteredCities)];
 
     // Ordenação
-    const sorted = [...mappedData.irregularities];
+    const sorted = [...filtered.irregularities];
     switch (sort) {
       case "percentage":
         sorted.sort((a, b) => b.reductionPercentage - a.reductionPercentage);

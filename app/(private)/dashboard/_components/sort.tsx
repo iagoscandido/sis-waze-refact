@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -20,12 +20,9 @@ type SortProps = {
 
 const Sort = ({ currentSort }: SortProps) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("sort", value);
-    router.push(`?${params.toString()}`);
+    router.push(`?sort=${value}`);
   };
 
   const sortOptions: SortOption[] = [
@@ -37,7 +34,7 @@ const Sort = ({ currentSort }: SortProps) => {
     <Select
       value={currentSort}
       onValueChange={handleChange}
-      defaultValue="percentage"
+      defaultValue={"percentage"}
       indicatorPosition="right"
     >
       <SelectTrigger>
