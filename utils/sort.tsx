@@ -1,11 +1,6 @@
 import type { Irregularity } from "@/types/irregularities-waze-data";
 import type { Route } from "@/types/routes-waze-data";
-
-const calcReduction = (current: number, historic: number): number => {
-  if (historic <= 0) return 0;
-  const percentage = (current / historic) * 100;
-  return 100 - percentage;
-};
+import { calcReduction } from "@/utils/calcs";
 
 export const sortIrregularitiesByReduction = (
   a: Irregularity,
