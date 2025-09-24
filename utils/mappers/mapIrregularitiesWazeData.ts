@@ -17,6 +17,7 @@ interface MappedIrregularities {
   currentTimeSeconds: number;
   delayTimeSeconds: number;
   reductionPercentage: number;
+  coordinates: { lat: number; lng: number }[];
 }
 
 export type MappedIrregularitiesWazeData = {
@@ -47,6 +48,10 @@ const mapIrregularities = (
 
     city: irregularity.city,
     street: irregularity.street,
+    coordinates: irregularity.line.map((line) => ({
+      lat: line.y,
+      lng: line.x,
+    })),
 
     cause: irregularity.causeAlert?.type,
     subCause: irregularity.causeAlert?.subType,

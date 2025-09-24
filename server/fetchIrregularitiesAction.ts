@@ -8,7 +8,7 @@ export async function fetchIrregularitiesWazeData(): Promise<IrregularitiesWazeD
   const url = process.env.IRREGULARITIES;
 
   const res = await fetch(url, {
-    next: { revalidate: 60 },
+    cache: "no-store",
   });
 
   if (!res.ok) {
