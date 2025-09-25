@@ -1,55 +1,41 @@
-# Etapa 1: Build
+# Etapa 1: Dependências
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Instalar pnpm globalmente
+RUN npm install -g pnpm
+
+# Copiar apenas os arquivos de lock e manifest
+COPY package.json pnpm-lock.yaml ./
+
+# Instalar dependências (somente prod + build deps)
+RUN pnpm install --frozen-lockfile
+
+# Etapa 2: Build
 FROM node:20-alpine AS builder
-
-# Instalar dependências necessárias
-RUN apk add --no-cache libc6-compat
-
-# Criar diretório de app
 WORKDIR /app
+RUN npm install -g pnpm
 
-# Copiar apenas arquivos de dependências para otimizar cache
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
-
-# Escolha do gerenciador de pacotes (pnpm > yarn > npm)
-# Se estiver usando PNPM:
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
-# Se estiver usando NPM:
-# RUN npm ci
-
-# Copiar todo o código
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Build do projeto com turbopack
 RUN pnpm run build
-# ou se usar npm
-# RUN npm run build
 
-# Etapa 2: Runtime
+# Etapa 3: Runtime
 FROM node:20-alpine AS runner
-
 WORKDIR /app
+RUN npm install -g pnpm
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Instalar pnpm no ambiente de produção
-RUN npm install -g pnpm
-
-# Criar usuário não-root
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
-
-# Copiar arquivos essenciais do builder
+# Copiar apenas o necessário para rodar
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-
-USER nextjs
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/next.config.* ./ 
 
 EXPOSE 3000
-
-# Iniciar o Next.js em modo produção
 CMD ["pnpm", "start"]
-# Se usar npm:
-# CMD ["npm", "start"]
