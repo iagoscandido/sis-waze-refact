@@ -32,6 +32,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# Instalar pnpm no ambiente de produção
+RUN npm install -g pnpm
+
 # Criar usuário não-root
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
