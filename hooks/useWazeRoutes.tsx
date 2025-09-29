@@ -13,6 +13,6 @@ export function useWazeRoutes({ sort, page, limit }: UseWazeRoutesProps) {
     queryKey: ["irregularities", sort, page, limit],
     queryFn: () => getWazeRoutes({ sort, page, limit }),
     refetchOnWindowFocus: true,
-    refetchInterval: 60 * 1000,
+    refetchInterval: 120 * 1000,
   });
 }
