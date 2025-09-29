@@ -2,9 +2,11 @@
 
 import { LoaderCircleIcon } from "lucide-react";
 import { MapButtonProps } from "@/components/map-button";
+import { Badge } from "@/components/ui/badge";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useIrregularities } from "@/hooks/useIrregularities";
+import { formatData } from "@/utils/time";
 
 export default function IrregularitiesCard({
   sort,
@@ -15,15 +17,20 @@ export default function IrregularitiesCard({
   page: number;
   limit: number;
 }) {
-  const { data: irregularities, isPending } = useIrregularities({
+  const {
+    data: irregularities,
+    isPending,
+    dataUpdatedAt,
+  } = useIrregularities({
     sort,
     page,
     limit,
   });
+
   if (isPending)
     return (
       <p>
-        <LoaderCircleIcon />
+        <LoaderCircleIcon size={16} className="animate-spin" />
       </p>
     );
   if (!irregularities)
@@ -33,7 +40,12 @@ export default function IrregularitiesCard({
       </p>
     );
   return (
-    <div>
+    <div className="gap-2">
+      <div className="flex items-center justify-center">
+        <Badge variant={"secondary"} appearance={"ghost"}>
+          atualização: {formatData(dataUpdatedAt)}
+        </Badge>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {irregularities
           .filter((i) => i.city === "Rio de Janeiro")

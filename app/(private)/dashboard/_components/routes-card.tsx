@@ -1,9 +1,11 @@
 "use client";
 
 import { MapButtonProps } from "@/components/map-button";
+import { Badge } from "@/components/ui/badge";
 import WazeCard from "@/components/waze-card/waze-card";
 import { getSeverityDescription } from "@/components/waze-card/waze-card.config";
 import { useWazeRoutes } from "@/hooks/useWazeRoutes";
+import { formatData } from "@/utils/time";
 
 export default function RoutesCard({
   sort,
@@ -14,7 +16,11 @@ export default function RoutesCard({
   page: number;
   limit: number;
 }) {
-  const { data: routes, isLoading } = useWazeRoutes({ sort, page, limit });
+  const {
+    data: routes,
+    isLoading,
+    dataUpdatedAt,
+  } = useWazeRoutes({ sort, page, limit });
   if (isLoading) return <p>Carregando...</p>;
 
   if (!routes || routes.length === 0)
@@ -26,6 +32,11 @@ export default function RoutesCard({
 
   return (
     <div>
+      <div className="flex items-center justify-center">
+        <Badge variant={"secondary"} appearance={"ghost"}>
+          atualização: {formatData(dataUpdatedAt)}
+        </Badge>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">
         {routes.map((r) => (
           <WazeCard

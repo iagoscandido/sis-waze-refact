@@ -33,8 +33,6 @@ const navigationLinks: NavigationLink[] = [
 
 const Navbar = async ({ searchParams }: { searchParams?: any }) => {
   const sort = (searchParams?.sort as string) ?? "";
-  const page = parseInt((searchParams?.page as string) ?? "1", 10);
-  const limit = parseInt((searchParams?.limit as string) ?? "20", 10);
 
   return (
     <header className="border-b px-4 md:px-6">

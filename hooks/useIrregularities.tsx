@@ -17,5 +17,6 @@ export function useIrregularities({
     queryKey: ["irregularities", sort, page, limit],
     queryFn: () => getIrregularities({ sort, page, limit }),
     refetchOnWindowFocus: true,
+    refetchInterval: 10 * 1000,
   });
 }
