@@ -7,5 +7,6 @@ export function useCities() {
     queryKey: ["cities"],
     queryFn: getCities,
     refetchOnWindowFocus: true,
+    refetchInterval: 120 * 1000,
   });
 }

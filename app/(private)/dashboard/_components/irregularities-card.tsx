@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircleIcon } from "lucide-react";
+import Loading from "@/app/loading";
 import { MapButtonProps } from "@/components/map-button";
 import { Badge } from "@/components/ui/badge";
 import WazeCard from "@/components/waze-card/waze-card";
@@ -21,24 +21,19 @@ export default function IrregularitiesCard({
     data: irregularities,
     isPending,
     dataUpdatedAt,
+    isError,
   } = useIrregularities({
     sort,
     page,
     limit,
   });
 
-  if (isPending)
-    return (
-      <p>
-        <LoaderCircleIcon size={16} className="animate-spin" />
-      </p>
-    );
+  if (isPending) return <Loading />;
+
+  if (isError) return <p>Erro ao carregar irregularidades</p>;
+
   if (!irregularities)
-    return (
-      <p className="text-center text-xl font-bold">
-        Nenhuma irregularidade encontrada no momento.
-      </p>
-    );
+    return <p>Nenhuma irregularidade encontrada no momento.</p>;
   return (
     <div className="gap-2">
       <div className="flex items-center justify-center">

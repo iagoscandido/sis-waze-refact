@@ -11,7 +11,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
       </header>
 
       <main className="flex flex-grow flex-wrap justify-center items-center gap-1 m-3">
-        <Suspense fallback={<p>Carregando...</p>}>{children}</Suspense>
+        <Suspense>{children}</Suspense>
       </main>
 
       <footer className="m-3">

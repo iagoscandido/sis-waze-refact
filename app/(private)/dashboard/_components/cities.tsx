@@ -1,6 +1,5 @@
 "use client";
 
-import { LoaderCircleIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -11,16 +10,7 @@ import {
 import { useCities } from "@/hooks/useCities";
 
 const Cities = () => {
-  const { data: cities, isPending } = useCities();
-
-  if (isPending)
-    return (
-      <p>
-        <LoaderCircleIcon />
-      </p>
-    );
-
-  if (!cities) return <p>Nenhuma cidade encontrada no momento.</p>;
+  const { data: cities } = useCities();
 
   return (
     <Select defaultValue="Rio de Janeiro" indicatorPosition="right">
@@ -28,7 +18,7 @@ const Cities = () => {
         <SelectValue placeholder="Cidade" />
       </SelectTrigger>
       <SelectContent defaultValue={"Rio de Janeiro"}>
-        {cities.map((city) => (
+        {cities?.map((city) => (
           <SelectItem key={city} value={city} disabled>
             {city}
           </SelectItem>

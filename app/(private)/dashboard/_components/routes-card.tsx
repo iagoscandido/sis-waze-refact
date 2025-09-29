@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import { MapButtonProps } from "@/components/map-button";
 import { Badge } from "@/components/ui/badge";
 import WazeCard from "@/components/waze-card/waze-card";
@@ -18,10 +19,14 @@ export default function RoutesCard({
 }) {
   const {
     data: routes,
-    isLoading,
+    isPending,
     dataUpdatedAt,
+    isError,
   } = useWazeRoutes({ sort, page, limit });
-  if (isLoading) return <p>Carregando...</p>;
+
+  if (isPending) return <Loading />;
+
+  if (isError) return <p>Erro ao carregar rotas</p>;
 
   if (!routes || routes.length === 0)
     return (
