@@ -3,7 +3,7 @@ import type { JsonResponseIrregularitiesWazeData } from "@/types/json-response-w
 export async function fetchIrregularitiesWazeData(): Promise<JsonResponseIrregularitiesWazeData> {
   if (!process.env.IRREGULARITIES)
     throw Error(
-      "varialbe de ambiente para rotas não encontrada ou não definida"
+      "Variavel de ambiente para irregularidades não encontrada ou não definida"
     );
   const url = process.env.IRREGULARITIES;
 
@@ -12,12 +12,14 @@ export async function fetchIrregularitiesWazeData(): Promise<JsonResponseIrregul
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch Waze data: ${res.statusText}`);
+    throw new Error(
+      `Failed to fetch Waze irregularities data: ${res.statusText}`
+    );
   }
 
   const data = await res.json();
 
-  if (!data) throw new Error("No Waze data found");
+  if (!data) throw new Error("No Waze irregularities data found");
 
   return data;
 }

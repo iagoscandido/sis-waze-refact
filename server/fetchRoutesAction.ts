@@ -3,7 +3,7 @@ import type { JsonResponseRoutesWazeData } from "@/types/json-response-waze-rout
 export async function fetchRoutesData(): Promise<JsonResponseRoutesWazeData> {
   if (!process.env.ROUTES)
     throw Error(
-      "varialbe de ambiente para rotas não encontrada ou não definida"
+      "Variavel de ambiente para rotas não encontrada ou não definida"
     );
   const url = process.env.ROUTES;
 
@@ -12,9 +12,12 @@ export async function fetchRoutesData(): Promise<JsonResponseRoutesWazeData> {
   });
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch Waze data: ${res.statusText}`);
+    throw new Error(`Failed to fetch Waze routes data: ${res.statusText}`);
   }
 
   const data = await res.json();
+
+  if (!data) throw new Error("No Waze rotues data found");
+
   return data;
 }
