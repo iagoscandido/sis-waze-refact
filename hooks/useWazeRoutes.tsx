@@ -4,14 +4,12 @@ import { getWazeRoutes } from "@/lib/fetchers/wazeRoutes";
 
 type UseWazeRoutesProps = {
   sort: string;
-  page: number;
-  limit: number;
 };
 
-export function useWazeRoutes({ sort, page, limit }: UseWazeRoutesProps) {
+export function useWazeRoutes({ sort }: UseWazeRoutesProps) {
   return useQuery({
-    queryKey: ["irregularities", sort, page, limit],
-    queryFn: () => getWazeRoutes({ sort, page, limit }),
+    queryKey: ["irregularities", sort],
+    queryFn: () => getWazeRoutes({ sort }),
     refetchOnWindowFocus: true,
     refetchInterval: 120 * 1000,
   });

@@ -2,20 +2,22 @@ import type { MappedIrregularities } from "@/utils/mappers/mapIrregularitiesWaze
 
 type fetchIrregularitiesParams = {
   sort?: string;
-  page?: number;
-  limit?: number;
+  city?: string;
 };
 
 const getIrregularities = async (
-  { sort = "percentage", page = 1, limit = 20 }: fetchIrregularitiesParams = {
+  {
+    sort = "percentage",
+    city = "Rio de Janeiro",
+  }: fetchIrregularitiesParams = {
     sort: "percentage",
+    city: "Rio de Janeiro",
   }
 ): Promise<MappedIrregularities[]> => {
   const params = new URLSearchParams();
 
   if (sort) params.set("sort", sort);
-  if (page) params.set("page", page.toString());
-  if (limit) params.set("limit", limit.toString());
+  if (city) params.set("city", city);
 
   const res = await fetch(`/api/irregularities?${params.toString()}`, {
     cache: "no-store",

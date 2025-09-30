@@ -8,21 +8,13 @@ import { getSeverityDescription } from "@/components/waze-card/waze-card.config"
 import { useWazeRoutes } from "@/hooks/useWazeRoutes";
 import { formatData } from "@/utils/time";
 
-export default function RoutesCard({
-  sort,
-  page,
-  limit,
-}: {
-  sort: string;
-  page: number;
-  limit: number;
-}) {
+export default function RoutesCard({ sort }: { sort: string }) {
   const {
     data: routes,
     isPending,
     dataUpdatedAt,
     isError,
-  } = useWazeRoutes({ sort, page, limit });
+  } = useWazeRoutes({ sort });
 
   if (isPending) return <Loading />;
 
@@ -37,9 +29,13 @@ export default function RoutesCard({
 
   return (
     <div>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2">
         <Badge variant={"secondary"} appearance={"ghost"}>
           atualização: {formatData(dataUpdatedAt)}
+        </Badge>
+
+        <Badge variant={"secondary"} appearance={"ghost"}>
+          total de rotas: {routes.length}
         </Badge>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:flex flex-wrap gap-2 justify-center">

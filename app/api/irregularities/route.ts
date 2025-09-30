@@ -5,9 +5,7 @@ import { mapIrregularitiesWazeData } from "@/utils/mappers/mapIrregularitiesWaze
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get("page") ?? "1", 10);
-    const limit = parseInt(searchParams.get("limit") ?? "20", 10);
-    const city = searchParams.get("city");
+    const city = searchParams.get("city") ?? "";
     const sort = searchParams.get("sort") ?? "";
 
     const data = await fetchIrregularitiesWazeData();
@@ -44,17 +42,8 @@ export async function GET(req: Request) {
         break;
     }
 
-    // Paginação
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginated = sorted.slice(start, end);
-
     return NextResponse.json({
-      page,
-      limit,
-      total: filtered.irregularities.length,
-      totalPages: Math.ceil(filtered.irregularities.length / limit),
-      data: paginated,
+      data: sorted,
       cities: cities,
     });
   } catch (error: any) {

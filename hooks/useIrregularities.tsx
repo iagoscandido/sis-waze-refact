@@ -4,18 +4,18 @@ import { getIrregularities } from "@/lib/fetchers/irregularities";
 
 type UseIrregularitiesProps = {
   sort: string;
-  page: number;
-  limit: number;
+
+  city: string;
 };
 
 export function useIrregularities({
   sort,
-  page,
-  limit,
+
+  city,
 }: UseIrregularitiesProps) {
   return useQuery({
-    queryKey: ["irregularities", sort, page, limit],
-    queryFn: () => getIrregularities({ sort, page, limit }),
+    queryKey: ["irregularities", sort, city],
+    queryFn: () => getIrregularities({ sort, city }),
     refetchOnWindowFocus: true,
     refetchInterval: 120 * 1000,
   });

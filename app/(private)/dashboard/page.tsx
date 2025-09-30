@@ -6,21 +6,14 @@ const IrregularitiesPage = async ({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) => {
-  // const session = await auth.api.getSession({
-  //   headers: await headers(),
-  // });
-  // if (!session) {
-  //   redirect("/sign-in");
-  // }
-
   const params = await searchParams;
 
   const sort = (params.sort as string) ?? "percentage";
-  const page = parseInt((params.page as string) ?? "1", 10);
-  const limit = parseInt((params.limit as string) ?? "20", 10);
+  const city = (params.city as string) ?? "Rio de Janeiro";
+
   return (
     <Suspense>
-      <IrregularitiesCard sort={sort} page={page} limit={limit} />
+      <IrregularitiesCard sort={sort} city={city} />
     </Suspense>
   );
 };

@@ -5,8 +5,6 @@ import { mapRoutesWazeData } from "@/utils/mappers/mapRoutesWazeData";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get("page") ?? "1", 10);
-    const limit = parseInt(searchParams.get("limit") ?? "20", 10);
     const sort = searchParams.get("sort") ?? "";
 
     const data = await fetchRoutesData();
@@ -30,17 +28,8 @@ export async function GET(req: Request) {
         break;
     }
 
-    // Paginação
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginated = sorted.slice(start, end);
-
     return NextResponse.json({
-      page,
-      limit,
-      total: mappedData.routes.length,
-      totalPages: Math.ceil(mappedData.routes.length / limit),
-      data: paginated,
+      data: sorted,
       updateTime: mappedData.updateTime,
     });
   } catch (error: any) {
